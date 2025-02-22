@@ -81,6 +81,35 @@ class Example extends VehicleRentalBase {
     }
 }
 
+// Thread for performing vehicle actions
+class VehicleActionsThread extends Thread {
+    private String vehicleType;
+
+    VehicleActionsThread(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("Performing actions for: " + vehicleType);
+            // Simulating some action delay
+            Thread.sleep(1000);
+            if (vehicleType.equals("Car")) {
+                System.out.println("Renting Car...");
+            } else if (vehicleType.equals("Bike")) {
+                System.out.println("Renting Bike...");
+            } else {
+                throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Thread was interrupted: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+
 // Main method
 public class Vehicle {
     public static void main(String args[]) {
@@ -113,5 +142,30 @@ public class Vehicle {
         l.threerents();
         Example r = new Example();
         r.tworents();
+
+        // Multithreading demonstration
+        System.out.println("Starting threads...");
+        VehicleActionsThread carThread = new VehicleActionsThread("Car");
+        VehicleActionsThread bikeThread = new VehicleActionsThread("Bike");
+        carThread.start();
+        bikeThread.start();
+
+        // Exception Handling in Main method
+        try {
+            // Simulate some action that could throw an exception
+            String[] vehicles = {"Car", "Bike", "Truck"};
+            for (int i = 0; i <= vehicles.length; i++) {
+                System.out.println(vehicles[i]);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Exception caught: " + e.getMessage());
+        }
+
+        try {
+            // Simulate dividing by zero
+            int result = 10 / 0;
+        } catch (ArithmeticException e) {
+            System.out.println("Exception caught: " + e.getMessage());
+        }
     }
 }
